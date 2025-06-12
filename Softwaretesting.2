@@ -1,0 +1,29 @@
+import ast  
+import re   
+
+code = '''
+def good_function():
+    """This function is good."""
+    return 42
+def BadFunction():
+  return 1
+'''
+tree = ast.parse(code)
+for node in ast.walk(tree):  
+    if isinstance(node, ast.FunctionDef):  
+        name = node.name
+        has_doc = ast.get_docstring(node) is not None
+        is_snake = re.match(r'^[a-z_][a-z0-9_]*$', name) is not None
+
+        print(f"\nFunction: {name}")
+        print(" - Docstring:", "Present" if has_doc else "Missing")
+        print(" - Naming:", "snake_case" if is_snake else "Not snake_case")
+
+lines = code.splitlines()
+for i, line in enumerate(lines, 1):  
+    stripped = line.lstrip()  
+    if stripped and not stripped.startswith("#"):  
+        spaces = len(line) - len(stripped)
+        if spaces % 4 != 0:
+            print(f"\n Indentation issue on line {i}: uses {spaces} spaces (should be multiple of 4)")
+Output - Error

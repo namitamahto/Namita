@@ -1,0 +1,29 @@
+import ast 
+
+
+def calculate_cyclomatic_complexity(code):
+    tree = ast.parse(code)  
+
+    complexity = 1
+
+    for node in ast.walk(tree):
+    
+        if isinstance(node, (ast.If, ast.For, ast.While, ast.And, ast.Or, ast.ExceptHandler)):
+            complexity += 1
+
+    return complexity  
+
+sample_code = '''
+def test(x):
+    if x > 10:
+        print("Large")
+    else:
+        print("Small")
+
+    for i in range(3):
+        if i % 2 == 0:
+            print(i)
+'''
+
+print("Cyclomatic Complexity:", calculate_cyclomatic_complexity(sample_code))
+Cyclomatic Complexity: 4
